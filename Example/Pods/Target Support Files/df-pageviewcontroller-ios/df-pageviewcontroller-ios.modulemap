@@ -1,0 +1,6 @@
+framework module df_pageviewcontroller_ios {
+  umbrella header "df-pageviewcontroller-ios-umbrella.h"
+
+  export *
+  module * { export * }
+}

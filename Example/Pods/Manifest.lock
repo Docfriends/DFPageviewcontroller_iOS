@@ -1,0 +1,16 @@
+PODS:
+  - df-pageviewcontroller-ios (0.1.0)
+
+DEPENDENCIES:
+  - df-pageviewcontroller-ios (from `../`)
+
+EXTERNAL SOURCES:
+  df-pageviewcontroller-ios:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  df-pageviewcontroller-ios: b88f96541d643531ed87c77332746cce6a0e6737
+
+PODFILE CHECKSUM: c3c2e3df7bc1e0cc9e4ddfe3b4d7e7d97765f84b
+
+COCOAPODS: 1.5.3

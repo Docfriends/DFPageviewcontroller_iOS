@@ -1,0 +1,6 @@
+framework module Pods_df_pageviewcontroller_ios_Tests {
+  umbrella header "Pods-df-pageviewcontroller-ios_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'df-pageviewcontroller-ios_Example' do
+  pod 'df-pageviewcontroller-ios', :path => '../'
+
+  target 'df-pageviewcontroller-ios_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
