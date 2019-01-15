@@ -46,6 +46,14 @@ public class PageViewController: UIPageViewController {
     /// 페이지컨트롤러가 활성화인지
     public var isEnabledScroll = true
     
+    /// 현재 인덱스
+    public var index = 0
+    
+    /// 현재 뷰컨
+    public var visibleViewController: UIViewController? {
+        return self.orderedViewControllers[safe: self.index]
+    }
+    
     private var pageButtonGroupView: PageButtonGroupView?
     
     // MARK: initialize
@@ -65,6 +73,14 @@ public class PageViewController: UIPageViewController {
     public func setPageButtonGroupView(_ pageButtonGroupView: PageButtonGroupView) {
         self.pageButtonGroupView = pageButtonGroupView
         self.pageButtonGroupView?.delegate = self
+        
+        self.pageButtonGroupView?.buttons.enumerated().forEach({
+            if $0.offset == 0 {
+                self.pageViewDelegate?.pageButtonGroupViewButtonSelectedButton($0.element)
+            } else {
+                self.pageViewDelegate?.pageButtonGroupViewButtonUnselectedButton($0.element)
+            }
+        })
     }
     
     /// init View
@@ -172,6 +188,7 @@ extension PageViewController: UIPageViewControllerDataSource {
 // MARK: UIPageViewControllerDelegate
 extension PageViewController: PageButtonGroupViewDelegate {
     public func pageButtonGroupViewButtonTap(_ button: UIButton, index: Int) {
+        self.index = index
         self.isEnabledScroll = false
         self.pageButtonGroupView?.buttonEnabled = self.isEnabledScroll
         self.scrollToViewController(index)
@@ -188,5 +205,11 @@ extension PageViewController: PageButtonGroupViewDelegate {
     }
     public func pageButtonGroupViewButtonUnselectedButton(_ button: UIButton) {
         self.pageViewDelegate?.pageButtonGroupViewButtonUnselectedButton(button)
+    }
+}
+
+extension Array where Element == UIViewController {
+    subscript (safe index: Int) -> Element? {
+        return self.indices ~= index ? self[index] : nil
     }
 }

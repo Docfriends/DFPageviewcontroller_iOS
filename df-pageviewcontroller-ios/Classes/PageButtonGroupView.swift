@@ -127,7 +127,7 @@ open class PageButtonGroupView: UIView {
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var selectedLineHeightConstraint: NSLayoutConstraint?
     private var selectedLineCenterConstraints = [NSLayoutConstraint]()
-    private var buttons = [UIButton]()
+    var buttons = [UIButton]()
     
     // MARK: Init
     
