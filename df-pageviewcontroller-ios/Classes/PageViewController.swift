@@ -56,6 +56,11 @@ public class PageViewController: UIPageViewController {
         return self.orderedViewControllers[safe: self.index]
     }
     
+    /// 버튼들
+    public var buttons: [UIButton]? {
+        return self.pageButtonGroupView?.buttons
+    }
+    
     private var pageButtonGroupView: PageButtonGroupView?
     
     // MARK: initialize
