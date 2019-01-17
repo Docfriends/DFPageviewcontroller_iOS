@@ -21,17 +21,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let button1 = UIButton(type: .system)
-        button1.setTitle("첫번째", for: .normal)
-        let button2 = UIButton(type: .system)
-        button2.setTitle("두번째", for: .normal)
-        let button3 = UIButton(type: .system)
-        button3.setTitle("세번째", for: .normal)
-        
-        self.pageButtonGroupView.append(button1)
-        self.pageButtonGroupView.append(button2)
-        self.pageButtonGroupView.append(button3)
-        
+        self.pageButtonGroupView.append(contentsOf: ["첫번째", "두번째", "세번째"])
         self.pageControl.numberOfPages = 3
     }
     
@@ -55,9 +45,8 @@ class ViewController: UIViewController {
             viewControllers.append(viewController2)
             viewControllers.append(viewController3)
             //            pageViewController.setDataSource()
-            pageViewController.setPageButtonGroupView(self.pageButtonGroupView)
             //            pageViewController.isReload = true
-            pageViewController.initView(viewControllers)
+            pageViewController.initView(viewControllers, pageButtonGroupView: self.pageButtonGroupView)
         }
     }
     
@@ -65,11 +54,14 @@ class ViewController: UIViewController {
 
 // MARK: PageViewControllerDelegate
 extension ViewController: PageViewControllerDelegate {
-    func pageViewControllerError(_ index: Int) {
+    func pageViewController(_ pageViewController: UIPageViewController, count: Int) {
         
     }
     func pageViewController(_ pageViewController: UIPageViewController, index: Int) {
         self.pageControl.currentPage = index
+    }
+    func pageViewControllerScrollToTop(_ visibleController: UIViewController?, index: Int) {
+        
     }
     func pageButtonGroupViewButtonSelectedButton(_ button: UIButton) {
         button.setTitleColor(UIColor.black, for: .normal)

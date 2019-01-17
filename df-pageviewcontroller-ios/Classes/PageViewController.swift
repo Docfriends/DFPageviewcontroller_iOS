@@ -17,7 +17,7 @@ public protocol PageViewControllerDelegate: class {
     /**
      페이지 컨트롤러 이동 안됨
      */
-    func pageViewControllerError(_ index: Int)
+    func pageViewControllerScrollToTop(_ visibleController: UIViewController?, index: Int)
     /**
      선택된 버튼
      */
@@ -31,7 +31,9 @@ public protocol PageViewControllerDelegate: class {
 public extension PageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, count: Int) { }
     func pageViewController(_ pageViewController: UIPageViewController, index: Int) { }
-    func pageViewControllerError(_ index: Int) { }
+    func pageViewControllerScrollToTop(_ visibleController: UIViewController?, index: Int) { }
+    func pageButtonGroupViewButtonSelectedButton(_ button: UIButton) { }
+    func pageButtonGroupViewButtonUnselectedButton(_ button: UIButton) { }
 }
 
 public class PageViewController: UIPageViewController {
@@ -84,12 +86,15 @@ public class PageViewController: UIPageViewController {
     }
     
     /// init View
-    public func initView(_ viewController: [UIViewController]) {
+    public func initView(_ viewController: [UIViewController], pageButtonGroupView: PageButtonGroupView? = nil) {
         self.orderedViewControllers = viewController
         if let initialViewController = self.orderedViewControllers.first {
             self.scrollToViewController(initialViewController)
         }
         self.pageViewDelegate?.pageViewController(self, count: orderedViewControllers.count)
+        if let pageButtonGroupView = pageButtonGroupView {
+            self.setPageButtonGroupView(pageButtonGroupView)
+        }
     }
     
     
@@ -197,7 +202,7 @@ extension PageViewController: PageButtonGroupViewDelegate {
         if let pageButtonGroupView = self.pageButtonGroupView, pageButtonGroupView.selectedIndex != index {
             return true
         }
-        self.pageViewDelegate?.pageViewControllerError(index)
+        self.pageViewDelegate?.pageViewControllerScrollToTop(self.visibleViewController, index: index)
         return false
     }
     public func pageButtonGroupViewButtonSelectedButton(_ button: UIButton) {

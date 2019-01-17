@@ -11,6 +11,13 @@ protocol PageButtonGroupViewDelegate: class {
     func pageButtonGroupViewButtonUnselectedButton(_ button: UIButton)
 }
 
+public extension UIButton {
+    public convenience init(title: String, type: UIButton.ButtonType) {
+        self.init(type: type)
+        self.setTitle(title, for: .normal)
+    }
+}
+
 open class PageButtonGroupView: UIView {
     
     weak var delegate: PageButtonGroupViewDelegate?
@@ -160,6 +167,29 @@ open class PageButtonGroupView: UIView {
     /// 추가
     public func append(contentsOf: [UIButton]) {
         contentsOf.forEach({ $0.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside) })
+        self.removeElements()
+        self.buttons.append(contentsOf: contentsOf)
+        self.redraw()
+    }
+    
+    /// 추가
+    public func append(_ buttonText: String) {
+        let button = UIButton(type: .system)
+        button.setTitle(buttonText, for: .normal)
+        button.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside)
+        self.removeElements()
+        self.buttons.append(button)
+        self.redraw()
+    }
+    
+    /// 추가
+    public func append(contentsOf: [String]) {
+        let contentsOf = contentsOf.map { text -> UIButton in
+            let button = UIButton(type: .system)
+            button.setTitle(text, for: .normal)
+            button.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside)
+            return button
+        }
         self.removeElements()
         self.buttons.append(contentsOf: contentsOf)
         self.redraw()
