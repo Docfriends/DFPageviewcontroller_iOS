@@ -118,6 +118,10 @@ open class PageButtonGroupView: UIView {
      */
     public var animateDuration: TimeInterval = 0.6
     
+    public var buttons: [UIButton] {
+        return self._buttons
+    }
+    
     private var _selectedIndex: Int?
     private lazy var buttonView: UIView = {
         let view = UIView()
@@ -134,7 +138,8 @@ open class PageButtonGroupView: UIView {
     private var bottomLineHeightConstraint: NSLayoutConstraint?
     private var selectedLineHeightConstraint: NSLayoutConstraint?
     private var selectedLineCenterConstraints = [NSLayoutConstraint]()
-    var buttons = [UIButton]()
+    
+    var _buttons = [UIButton]()
     
     // MARK: Init
     
@@ -160,7 +165,7 @@ open class PageButtonGroupView: UIView {
     public func append(_ button: UIButton) {
         button.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside)
         self.removeElements()
-        self.buttons.append(button)
+        self._buttons.append(button)
         self.redraw()
     }
     
@@ -168,7 +173,7 @@ open class PageButtonGroupView: UIView {
     public func append(contentsOf: [UIButton]) {
         contentsOf.forEach({ $0.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside) })
         self.removeElements()
-        self.buttons.append(contentsOf: contentsOf)
+        self._buttons.append(contentsOf: contentsOf)
         self.redraw()
     }
     
@@ -178,7 +183,7 @@ open class PageButtonGroupView: UIView {
         button.setTitle(buttonText, for: .normal)
         button.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside)
         self.removeElements()
-        self.buttons.append(button)
+        self._buttons.append(button)
         self.redraw()
     }
     
@@ -191,7 +196,7 @@ open class PageButtonGroupView: UIView {
             return button
         }
         self.removeElements()
-        self.buttons.append(contentsOf: contentsOf)
+        self._buttons.append(contentsOf: contentsOf)
         self.redraw()
     }
     
@@ -199,7 +204,7 @@ open class PageButtonGroupView: UIView {
     public func insert(_ button: UIButton, at index: Int) {
         button.addTarget(self, action: #selector(self.buttonTap(_:)), for: .touchUpInside)
         self.removeElements()
-        self.buttons.insert(button, at: index)
+        self._buttons.insert(button, at: index)
         self.redraw()
     }
     
@@ -207,7 +212,7 @@ open class PageButtonGroupView: UIView {
     @discardableResult
     public func remove(at index: Int) -> UIButton {
         self.removeElements()
-        let button = self.buttons.remove(at: index)
+        let button = self._buttons.remove(at: index)
         self.redraw()
         return button
     }
@@ -215,7 +220,7 @@ open class PageButtonGroupView: UIView {
     /// 삭제
     public func removeAll() {
         self.removeElements()
-        self.buttons.removeAll()
+        self._buttons.removeAll()
         self.redraw()
     }
     
