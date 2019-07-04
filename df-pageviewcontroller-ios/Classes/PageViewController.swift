@@ -117,7 +117,7 @@ public class PageViewController: UIPageViewController {
     /// 스크롤 이동
     public func scrollToViewController(_ index: Int) {
         if let firstViewController = viewControllers?.first,
-            let currentIndex = orderedViewControllers.index(of: firstViewController) {
+            let currentIndex = orderedViewControllers.firstIndex(of: firstViewController) {
             let direction: UIPageViewController.NavigationDirection = index >= currentIndex ? .forward : .reverse
             let nextViewController = orderedViewControllers[index]
             self.scrollToViewController(nextViewController, direction: direction)
@@ -150,7 +150,7 @@ public class PageViewController: UIPageViewController {
     /// Notify NewIndex
     private func notifyDelegateOfNewIndex() {
         if let firstViewController = viewControllers?.first,
-            let index = orderedViewControllers.index(of: firstViewController) {
+            let index = orderedViewControllers.firstIndex(of: firstViewController) {
             self.pageButtonGroupView?.selectedLine(index)
             self.pageViewDelegate?.pageViewController(self, index: index)
         }
@@ -174,7 +174,7 @@ extension PageViewController: UIPageViewControllerDelegate {
 // MARK: UIPageViewControllerDataSource
 extension PageViewController: UIPageViewControllerDataSource {
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else { return nil }
         let previousIndex = viewControllerIndex - 1
         if !self.isReload {
             if previousIndex < 0 { return nil }
@@ -185,7 +185,7 @@ extension PageViewController: UIPageViewControllerDataSource {
     }
     
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
+        guard let viewControllerIndex = orderedViewControllers.firstIndex(of: viewController) else { return nil }
         let nextIndex = viewControllerIndex + 1
         if !self.isReload {
             if nextIndex >= orderedViewControllers.count { return nil }

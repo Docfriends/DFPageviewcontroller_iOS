@@ -12,7 +12,7 @@ protocol PageButtonGroupViewDelegate: class {
 }
 
 public extension UIButton {
-    public convenience init(title: String, type: UIButton.ButtonType) {
+    convenience init(title: String, type: UIButton.ButtonType) {
         self.init(type: type)
         self.setTitle(title, for: .normal)
     }
