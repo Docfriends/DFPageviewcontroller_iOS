@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'df-pageviewcontroller-ios'
-  s.version          = '0.1.5'
+  s.version          = '0.1.6'
   s.summary          = '닥프렌즈의 페이지 컨트롤러 커스텀 라이브러리'
 
 # This description is used to generate tags and improve search results.

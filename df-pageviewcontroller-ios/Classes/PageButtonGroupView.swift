@@ -79,6 +79,18 @@ open class PageButtonGroupView: UIView {
     }()
     
     /**
+     선택한 하단 라인
+     */
+    public lazy var selectedLineContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        let selectedLineHeightConstraint = NSLayoutConstraint(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 2)
+        view.addConstraint(selectedLineHeightConstraint)
+        view.backgroundColor = .clear
+        return view
+    }()
+    
+    /**
      선택한 하단 라인 width와 버튼width 차이. 0이면 버튼과 동일크기, 10이면 버튼보다 10이 작음
      */
     public var selectedWidthMargin: CGFloat = 10
@@ -110,6 +122,30 @@ open class PageButtonGroupView: UIView {
         }
         get {
             return self.buttons.first?.isUserInteractionEnabled ?? true
+        }
+    }
+    
+    public var enabledColor: UIColor? {
+        didSet {
+            self.buttons.enumerated().filter({ $0.offset == self.selectedIndex }).forEach({ $0.element.setTitleColor(self.enabledColor, for: .normal) })
+        }
+    }
+    
+    public var enabledFont: UIFont? {
+        didSet {
+            self.buttons.enumerated().filter({ $0.offset == self.selectedIndex }).forEach({ $0.element.titleLabel?.font = self.enabledFont })
+        }
+    }
+    
+    public var unenabledColor: UIColor? {
+        didSet {
+            self.buttons.enumerated().filter({ $0.offset != self.selectedIndex }).forEach({ $0.element.setTitleColor(self.unenabledColor, for: .normal) })
+        }
+    }
+    
+    public var unenabledFont: UIFont? {
+        didSet {
+            self.buttons.enumerated().filter({ $0.offset != self.selectedIndex }).forEach({ $0.element.titleLabel?.font = self.unenabledFont })
         }
     }
     
@@ -232,7 +268,7 @@ open class PageButtonGroupView: UIView {
         self.selectedLineCenterConstraints.forEach({ $0.priority = UILayoutPriority(250) })
         self.selectedLineCenterConstraints[index].priority = UILayoutPriority(750)
         UIView.animate(withDuration: self.animateDuration, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.8, options: .curveEaseIn, animations: {
-            self.buttonView.layoutIfNeeded()
+            self.selectedLineContainerView.layoutIfNeeded()
         })
     }
     
@@ -243,12 +279,14 @@ open class PageButtonGroupView: UIView {
             $0.removeConstraints($0.constraints)
             $0.removeFromSuperview()
         })
+        self.selectedLineContainerView.removeFromSuperview()
         self.selectedLineView.removeFromSuperview()
         self.selectedLineCenterConstraints.removeAll()
     }
     
     /// 다시 그리기
     private func redraw() {
+        self._selectedIndex = 0
         self.buttons.forEach({
             $0.setTitleColor(.black, for: .normal)
             self.buttonView.addSubview($0)
@@ -271,7 +309,8 @@ open class PageButtonGroupView: UIView {
         self.buttonView.addConstraint(NSLayoutConstraint(item: self.buttonView, attribute: .leading, relatedBy: .equal, toItem: firstButton, attribute: .leading, multiplier: 1, constant: 0))
         self.buttonView.addConstraint(NSLayoutConstraint(item: self.buttonView, attribute: .trailing, relatedBy: .equal, toItem: lastButton, attribute: .trailing, multiplier: 1, constant: 0))
         
-        self.buttonView.addSubview(self.selectedLineView)
+        self.buttonView.addSubview(self.selectedLineContainerView)
+        self.selectedLineContainerView.addSubview(self.selectedLineView)
         
         self.buttons.enumerated().forEach({
             let centerConstraint = NSLayoutConstraint(item: $0.element, attribute: .centerX, relatedBy: .equal, toItem: self.selectedLineView, attribute: .centerX, multiplier: 1, constant: 0)
@@ -282,8 +321,15 @@ open class PageButtonGroupView: UIView {
         
         self.buttonView.addConstraints([
             NSLayoutConstraint(item: firstButton, attribute: .width, relatedBy: .equal, toItem: self.selectedLineView, attribute: .width, multiplier: 1, constant: self.selectedWidthMargin),
-            NSLayoutConstraint(item: self.buttonView, attribute: .bottom, relatedBy: .equal, toItem: self.selectedLineView, attribute: .bottom, multiplier: 1, constant: self.selectedBottomMargin)
+            NSLayoutConstraint(item: self.buttonView, attribute: .bottom, relatedBy: .equal, toItem: self.selectedLineContainerView, attribute: .bottom, multiplier: 1, constant: self.selectedBottomMargin),
+            NSLayoutConstraint(item: self.buttonView, attribute: .leading, relatedBy: .equal, toItem: self.selectedLineContainerView, attribute: .leading, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: self.buttonView, attribute: .trailing, relatedBy: .equal, toItem: self.selectedLineContainerView, attribute: .trailing, multiplier: 1, constant: 0)
             ])
+        
+        self.selectedLineContainerView.addConstraints([
+            NSLayoutConstraint(item: self.selectedLineContainerView, attribute: .top, relatedBy: .equal, toItem: self.selectedLineView, attribute: .top, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: self.selectedLineContainerView, attribute: .bottom, relatedBy: .equal, toItem: self.selectedLineView, attribute: .bottom, multiplier: 1, constant: 0)
+        ])
         
         self.buttonsUI()
     }
@@ -292,6 +338,7 @@ open class PageButtonGroupView: UIView {
         self.bottomLineView.backgroundColor = .gray
         self.buttonView.backgroundColor = .clear
         self.selectedLineView.backgroundColor = UIColor.blue
+        self.selectedLineContainerView.backgroundColor = .clear
     }
     
     
@@ -313,8 +360,20 @@ open class PageButtonGroupView: UIView {
         
         for (index, element) in self.buttons.enumerated() {
             if index == self.selectedIndex {
+                if let color = self.enabledColor {
+                    self.buttons[index].setTitleColor(color, for: .normal)
+                }
+                if let font = self.enabledFont {
+                    self.buttons[index].titleLabel?.font = font
+                }
                 self.delegate?.pageButtonGroupViewButtonSelectedButton(element)
             } else {
+                if let color = self.unenabledColor {
+                    self.buttons[index].setTitleColor(color, for: .normal)
+                }
+                if let font = self.unenabledFont {
+                    self.buttons[index].titleLabel?.font = font
+                }
                 self.delegate?.pageButtonGroupViewButtonUnselectedButton(element)
             }
         }
