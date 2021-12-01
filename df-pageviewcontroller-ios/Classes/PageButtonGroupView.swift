@@ -4,7 +4,7 @@
 
 import UIKit
 
-protocol PageButtonGroupViewDelegate: class {
+protocol PageButtonGroupViewDelegate: AnyObject {
     func pageButtonGroupViewButtonIsTap(_ button: UIButton, index: Int) -> Bool
     func pageButtonGroupViewButtonTap(_ button: UIButton, index: Int)
     func pageButtonGroupViewButtonSelectedButton(_ button: UIButton)

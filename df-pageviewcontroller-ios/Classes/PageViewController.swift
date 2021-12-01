@@ -5,7 +5,7 @@
 import UIKit
 
 // 페이지 컨트롤러 딜리게이트
-public protocol PageViewControllerDelegate: class {
+public protocol PageViewControllerDelegate: AnyObject {
     /**
      페이지 컨트롤러 처음 시작시
      */
