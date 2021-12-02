@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'df-pageviewcontroller-ios'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = '닥프렌즈의 페이지 컨트롤러 커스텀 라이브러리'
 
 # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/Docfriends-Dev/df-pageviewcontroller-ios.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '13.0'
 
   s.source_files = 'df-pageviewcontroller-ios/Classes/**/*'
   
